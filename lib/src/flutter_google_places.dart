@@ -47,6 +47,12 @@ class PlacesAutocompleteWidget extends StatefulWidget {
   ///
   /// In case of changing the default text style of result's text
   final TextStyle? resultTextStyle;
+  
+  /// Rank By for near by search
+  final String? rankBy;
+  
+  /// Type for near by search
+  final String? type;
 
   const PlacesAutocompleteWidget({
     required this.apiKey,
@@ -73,6 +79,8 @@ class PlacesAutocompleteWidget extends StatefulWidget {
     this.textStyle,
     this.themeData,
     this.resultTextStyle,
+    this.type,
+    this.rankBy,
   }) : super(key: key);
 
   @override
@@ -495,9 +503,9 @@ abstract class PlacesAutocompleteState extends State<PlacesAutocompleteWidget> {
 
       final PlacesSearchResponse nearBy = await _places!.searchNearbyWithRankBy(
         widget.location!,
-        'distance',
+        widget.rankBy!,
         keyword: value,
-        type: 'restaurant',
+        type: widget.type,
       );
 
       if (res.errorMessage?.isNotEmpty == true ||
@@ -602,6 +610,8 @@ class PlacesAutocomplete {
     TextStyle? textStyle,
     ThemeData? themeData,
     TextStyle? resultTextStyle,
+    String? rankBy,
+    String? type,
   }) {
     final autoCompleteWidget = PlacesAutocompleteWidget(
       apiKey: apiKey,
@@ -626,6 +636,8 @@ class PlacesAutocomplete {
       textStyle: textStyle,
       themeData: themeData,
       resultTextStyle: resultTextStyle,
+      rankBy: rankBy,
+      type: type,
     );
 
     if (mode == Mode.overlay) {
