@@ -174,8 +174,7 @@ class _PlacesAutocompleteOverlayState extends PlacesAutocompleteState {
           child: widget.logo ?? const PoweredByGoogleImage(),
         );
       } else {
-
-        for(var i = 0; i < _response!.predictions.length; i++){
+        for (var i = 0; i < _response!.predictions.length; i++) {
           log(
             'predictions: ${_response!.predictions[i].distanceMeters}',
           );
@@ -402,7 +401,7 @@ class PredictionsListView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    for(var i = 0; i < predictions.length; i++){
+    for (var i = 0; i < predictions.length; i++) {
       log(
         'predictions: ${predictions[i].distanceMeters}',
       );
@@ -505,14 +504,19 @@ abstract class PlacesAutocompleteState extends State<PlacesAutocompleteWidget> {
         region: widget.region,
       );
 
+      final PlacesSearchResponse nearBy = await _places!.searchNearbyWithRankBy(
+        widget.location!,
+        'distance',
+      );
+
       if (res.errorMessage?.isNotEmpty == true ||
           res.status == "REQUEST_DENIED") {
         onResponseError(res);
       } else {
-        onResponse(res);
+        onResponse(res, nearBy);
       }
     } else {
-      onResponse(null);
+      onResponse(null, null);
     }
   }
 
@@ -547,10 +551,40 @@ abstract class PlacesAutocompleteState extends State<PlacesAutocompleteWidget> {
   }
 
   @mustCallSuper
-  void onResponse(PlacesAutocompleteResponse? res) {
+  void onResponse(
+      PlacesAutocompleteResponse? res, PlacesSearchResponse? nearby) {
     if (!mounted) return;
 
     setState(() {
+      log('Response: ${res?.predictions.length}');
+
+      /// Add near by results in the response
+      if (res != null && nearby != null) {
+        log('nearby: ${nearby.results.length} || ${nearby.results[0].name}');
+        res.predictions.insertAll(
+          0,
+          nearby.results
+              .map(
+                (e) => Prediction(
+                  description: e.vicinity,
+                  placeId: e.placeId,
+                  id: e.id,
+                  reference: e.reference,
+                  matchedSubstrings: [],
+                  structuredFormatting: StructuredFormatting(
+                    mainText: e.name,
+                    secondaryText: e.vicinity,
+                  ),
+                  terms: [],
+                  types: e.types,
+                ),
+              )
+              .toList(), // Ensure this is a list since insertAll requires a List.
+        );
+      }
+
+      log('After adding: ${res?.predictions.length}');
+
       _response = res;
       _searching = false;
     });
