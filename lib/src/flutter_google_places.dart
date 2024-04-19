@@ -47,10 +47,10 @@ class PlacesAutocompleteWidget extends StatefulWidget {
   ///
   /// In case of changing the default text style of result's text
   final TextStyle? resultTextStyle;
-  
+
   /// Rank By for near by search
   final String? rankBy;
-  
+
   /// Type for near by search
   final String? type;
 
@@ -561,7 +561,7 @@ abstract class PlacesAutocompleteState extends State<PlacesAutocompleteWidget> {
           nearby.results
               .map(
                 (e) => Prediction(
-                  description: e.vicinity,
+                  description: '${e.name}, ${e.vicinity}',
                   placeId: e.placeId,
                   id: e.id,
                   reference: e.reference,
