@@ -402,6 +402,11 @@ class PredictionsListView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    for(var i = 0; i < predictions.length; i++){
+      log(
+        'predictions: ${predictions[i].distanceMeters}',
+      );
+    }
     return ListView(
       children: predictions
           .map(
