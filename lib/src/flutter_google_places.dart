@@ -1,7 +1,6 @@
 library flutter_google_places.src;
 
 import 'dart:async';
-import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:google_api_headers/google_api_headers.dart';
@@ -174,11 +173,6 @@ class _PlacesAutocompleteOverlayState extends PlacesAutocompleteState {
           child: widget.logo ?? const PoweredByGoogleImage(),
         );
       } else {
-        for (var i = 0; i < _response!.predictions.length; i++) {
-          log(
-            'predictions: ${_response!.predictions[i].distanceMeters}',
-          );
-        }
         body = SingleChildScrollView(
           child: Material(
             borderRadius: BorderRadius.only(
@@ -401,11 +395,6 @@ class PredictionsListView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    for (var i = 0; i < predictions.length; i++) {
-      log(
-        'predictions: ${predictions[i].distanceMeters}',
-      );
-    }
     return ListView(
       children: predictions
           .map(
@@ -558,11 +547,7 @@ abstract class PlacesAutocompleteState extends State<PlacesAutocompleteWidget> {
     if (!mounted) return;
 
     setState(() {
-      log('Response: ${res?.predictions.length}');
-
-      /// Add near by results in the response
       if (res != null && nearby != null) {
-        log('nearby: ${nearby.results.length} || ${nearby.results[0].name}');
         res.predictions.insertAll(
           0,
           nearby.results
@@ -584,8 +569,6 @@ abstract class PlacesAutocompleteState extends State<PlacesAutocompleteWidget> {
               .toList(), // Ensure this is a list since insertAll requires a List.
         );
       }
-
-      log('After adding: ${res?.predictions.length}');
 
       _response = res;
       _searching = false;
