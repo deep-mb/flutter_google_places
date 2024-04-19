@@ -507,6 +507,8 @@ abstract class PlacesAutocompleteState extends State<PlacesAutocompleteWidget> {
       final PlacesSearchResponse nearBy = await _places!.searchNearbyWithRankBy(
         widget.location!,
         'distance',
+        keyword: value,
+        type: 'restaurant',
       );
 
       if (res.errorMessage?.isNotEmpty == true ||
