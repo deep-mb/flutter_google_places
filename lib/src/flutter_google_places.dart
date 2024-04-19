@@ -1,6 +1,7 @@
 library flutter_google_places.src;
 
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:google_api_headers/google_api_headers.dart';
@@ -173,6 +174,12 @@ class _PlacesAutocompleteOverlayState extends PlacesAutocompleteState {
           child: widget.logo ?? const PoweredByGoogleImage(),
         );
       } else {
+
+        for(var i = 0; i < _response!.predictions.length; i++){
+          log(
+            'predictions: ${_response!.predictions[i].distanceMeters}',
+          );
+        }
         body = SingleChildScrollView(
           child: Material(
             borderRadius: BorderRadius.only(
