@@ -501,21 +501,21 @@ abstract class PlacesAutocompleteState extends State<PlacesAutocompleteWidget> {
         region: widget.region,
       );
 
-      final PlacesSearchResponse nearBy = await _places!.searchNearbyWithRankBy(
+      /*final PlacesSearchResponse nearBy = await _places!.searchNearbyWithRankBy(
         widget.location!,
         widget.rankBy!,
         keyword: value,
         type: widget.type,
-      );
+      );*/
 
       if (res.errorMessage?.isNotEmpty == true ||
           res.status == "REQUEST_DENIED") {
         onResponseError(res);
       } else {
-        onResponse(res, nearBy);
+        onResponse(res, /*nearBy*/);
       }
     } else {
-      onResponse(null, null);
+      onResponse(null, /*null*/);
     }
   }
 
@@ -551,11 +551,11 @@ abstract class PlacesAutocompleteState extends State<PlacesAutocompleteWidget> {
 
   @mustCallSuper
   void onResponse(
-      PlacesAutocompleteResponse? res, PlacesSearchResponse? nearby) {
+      PlacesAutocompleteResponse? res, /*PlacesSearchResponse? nearby*/) {
     if (!mounted) return;
 
     setState(() {
-      if (res != null && nearby != null) {
+      /*if (res != null && nearby != null) {
         res.predictions.insertAll(
           0,
           nearby.results
@@ -576,7 +576,7 @@ abstract class PlacesAutocompleteState extends State<PlacesAutocompleteWidget> {
               )
               .toList(), // Ensure this is a list since insertAll requires a List.
         );
-      }
+      }*/
 
       _response = res;
       _searching = false;
